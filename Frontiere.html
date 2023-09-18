@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Website</title>
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+   integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+   crossorigin=""/>
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+   integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+   crossorigin=""></script>
+
+
+   <style>
+
+.mapboxgl-popup {
+max-width: 400px;
+font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+    .container {
+      position:static;
+            height: auto; 
+            width: 100%;
+        margin:0;
+      padding:0;
+    }
+    .row{
+      height:auto;
+      min-height:fit-content;
+    }
+
+    .box {
+  height: 20px;
+  width: 20px;
+  margin-bottom: 15px;
+  border: 1px solid black;
+}
+
+    #map { 
+            position:absolute;
+            height: 100%; 
+            width: 100%;
+        margin:0;
+      padding:0; }            
+    #title { color: #E5FC59;
+                font-family: Arial, Helvetica, sans-serif;
+                padding-top:2%;
+                padding-left:2%;
+                padding-bottom:2%;
+                text-align:left;
+                position:absolute;
+                z-index:1;
+                font-size: 150%;
+
+    }
+
+  #sub { color: #E5FC59;
+                font-family: Arial, Helvetica, sans-serif;
+                padding-top:15%;
+                padding-left:2%;
+                padding-bottom:2%;
+                text-align:left;
+                position:absolute;
+                z-index:1;
+                font-size: 120%;
+
+              }
+
+              #footer { color: #E5FC59;
+                font-family: Arial, Helvetica, sans-serif;
+                padding-left:5%;
+                padding-bottom:10%;
+                text-align:left;
+                z-index:1;
+                font-size: 120%;
+                position: fixed;
+   bottom: 0;
+   width: 100%;
+   height: 60px;   /* Height of the footer */
+
+              }
+
+    body { background-color: hsla(13, 15%, 34%, 0.8)}
+
+
+   </style>
+
+
+  </head>
+  <body>
+    <div class="container">
+
+        <div class="row" style="z-index: 0;">
+            <div class="col-12" id="map">
+        </div>
+
+        <div class="row" id="title">
+            <div class="col-sm-12 col-md-4" style="font-size:80%; text-align: left; padding-left:4%; padding-bottom:4%;">  <b> Frontiere della transizione energetica </b> <br> 
+              Database sui permessi di ricerca per materie prime critiche  </div> 
+            <div class="col-sm-12 col-md-5" style="font-size:50%; line-height: 150%; text-align: left; padding-left:4%; padding-bottom:4%;"> As the European Commission moves forward on building a secure supply of critical minerals through its Raw Materials Act and associated initiatives, geologic exploration licences (EL) are already multiplying throughout the European continent and, not least, across the Italian peninsula with unforeseeable impacts upon local livelihoods and biomes (del Mármol & Vaccaro 2020). A conglomerate of Australia-based transnational companies is currently entitled a total of 18 ELs across diverse environments, from the Alpine region to the Apennine mountains and through the geothermal fields of Tuscany and Latium, happening in often marginalised and invisibilised areas despite their geographic location in the Global North. </div> 
+            <div class="col-sm-12 col-md-3" style="text-align: left; padding-left:4%;"> About </div> 
+        </div> 
+        <div class="row" id="sub">
+          <div class="col-12 col-sm-4">  <b> </b> <br> 
+            </div> 
+          <div class="col-12 col-sm-5" style="font-size:70%; line-height: 150%;">  </div> 
+          <div class="col-12 col-sm-3" style="font-size:70%; line-height: 150%; text-align: left; padding-left:4%;"> 
+           </div> 
+        </div>    
+
+      <div class="row" id="footer" style="z-index: 0;">
+        <div class="col-12 col-sm-4">
+
+        <div style="color: white"> Istanza archiviata </div>
+         <div style="color:hsla(163, 100%, 74%, 1)"> Istanza di permesso di ricerca </div>
+         Permesso di ricerca
+          </div> 
+        <div class="col-12 col-sm-5" style="font-size:70%; line-height: 150%;">  </div> 
+        <div class="col-12 col-sm-3" style="font-size:70%; line-height: 150%; text-align: left; padding-left:4%;"> 
+         </div> 
+      </div>
+
+      </div>
+    </div>
+      
+        
+            
+    <script type = "text/javascript">
+        	mapboxgl.accessToken = 'pk.eyJ1IjoiNjAwbXQiLCJhIjoiY2tqZnNvdXB0OHVvczMxcWowZ29iNnowYiJ9.gPVHgS1CdbzW0Hig733jxw';
+const map = new mapboxgl.Map({
+container: 'map', // container ID
+// Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+style: 'mapbox://styles/600mt/clftmhyi800af01t6as145hiq', // style URL
+center: [11.539481, 43.624513], // starting position [lng, lat]
+zoom: 6.7 // starting zoom
+});
+
+map.on('load', () => {
+// Add a source for the state polygons.
+map.addSource('frontiere-assoluto-57d40r', {
+'type': 'geojson',
+'data': 'https://docs.mapbox.600mt.03ld90lpcom/mapbox-gl-js/assets/20230821-permessi-ricerca.shp'
+});
+
+
+ 
+// When a click event occurs on a feature in the states layer,
+// open a popup at the location of the click, with description
+// HTML from the click event's properties.
+map.on('click', 'frontiere-assoluto-57d40r', (e) => {
+new mapboxgl.Popup()
+.setLngLat(e.lngLat)
+.setHTML(e.features[0].properties.Minerali)
+.addTo(map);});
+
+// Change the cursor to a pointer when
+// the mouse is over the states layer.
+map.on('mouseenter', 'frontiere-assoluto-57d40r', () => {
+map.getCanvas().style.cursor = 'pointer';
+});
+ 
+// Change the cursor back to a pointer
+// when it leaves the states layer.
+map.on('mouseleave', 'frontiere-assoluto-57d40r', () => {
+map.getCanvas().style.cursor = '';
+});
+
+});
+
+
+        </script>
+  </body>
+</html>
